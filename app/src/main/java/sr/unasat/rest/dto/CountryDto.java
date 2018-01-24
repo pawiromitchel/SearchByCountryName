@@ -4,14 +4,17 @@ package sr.unasat.rest.dto;
  * Created by mnarain on 1/24/2018.
  */
 
+// data transfer object (DTO)
 public class CountryDto {
     private String name;
     private String capital;
     private String region;
 
+    // default constructor
     public CountryDto() {
     }
 
+    // custom constructor
     public CountryDto(String name, String capital, String region) {
         this.name = name;
         this.capital = capital;
@@ -42,6 +45,7 @@ public class CountryDto {
         this.region = region;
     }
 
+    // convert System.Out to custom string
     @Override
     public String toString() {
         return  "Country:"+ "\n" +

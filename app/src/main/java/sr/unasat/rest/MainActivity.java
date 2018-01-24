@@ -2,6 +2,8 @@ package sr.unasat.rest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,28 +24,41 @@ import sr.unasat.rest.dto.CountryDto;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextView;
+    private EditText CountryNameEditText;
+    private TextView countryNameText;
+    private TextView countryCapitalText;
+    private TextView countryRegionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTextView = (TextView) findViewById(R.id.text);
-        getCountryData();
+        CountryNameEditText = (EditText) findViewById(R.id.searchCountryName);
+
+        // country details
+        countryNameText = (TextView) findViewById(R.id.countryNameText);
+        countryCapitalText = (TextView) findViewById(R.id.countryCapitalText);
+        countryRegionText = (TextView) findViewById(R.id.countryRegionText);
     }
 
-    private void getCountryData() {
+    private void getCountryData(String countryName) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String ALL_COUNTRIES = "https://restcountries.eu/rest/v2/all";
-      //  final String ONE_COUNTRY = "https://restcountries.eu/rest/v2/name/" + countryName;
+        // final String ALL_COUNTRIES = "https://restcountries.eu/rest/v2/all";
+        final String ONE_COUNTRY = "https://restcountries.eu/rest/v2/name/" + countryName;
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_COUNTRIES,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ONE_COUNTRY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         List<CountryDto> countryDto = mapJsonToCountryObject(response);
-                        System.out.println(countryDto);
+
+                        // place the values in the TextViews
+                        countryNameText.setText(countryDto.get(0).getName());
+                        countryCapitalText.setText(countryDto.get(0).getCapital());
+                        countryRegionText.setText(countryDto.get(0).getRegion());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -75,4 +90,7 @@ public class MainActivity extends AppCompatActivity {
         return countryList;
     }
 
+    public void searchCountry(View view) {
+        getCountryData(CountryNameEditText.getText().toString());
+    }
 }
